@@ -1,0 +1,5 @@
+# Hasil build Maven (dibuat ulang saat Clean and Build)
+target/
+
+# File pribadi NetBeans
+nbproject/private/

@@ -134,7 +134,12 @@ public class LoginForm extends javax.swing.JPanel {
                 if (rs.next()) {
                     JOptionPane.showMessageDialog(this,
                             "Login berhasil! Selamat datang, " + username);
-                    // TODO: pindah ke Menu Utama (form berikutnya)
+                    // Tutup jendela login, buka Menu Utama
+                    java.awt.Window jendela = javax.swing.SwingUtilities.getWindowAncestor(this);
+                    if (jendela != null) {
+                        jendela.dispose();
+                    }
+                    new MenuUtama().setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(this, "Username atau password salah!");
                     txtPassword.setText("");
