@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- SessionFactory Hibernate (konfigurasi dibaca dari hibernate.cfg.xml) -->
+    <bean id="sessionFactory"
+          class="com.mycompany.farrelaa.HibernateUtil"
+          factory-method="getSessionFactory"/>
+
+    <!-- DAO: sessionFactory diisi Spring lewat setter (setter injection) -->
+    <bean id="barangDao" class="com.mycompany.farrelaa.dao.BarangDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="transaksiDao" class="com.mycompany.farrelaa.dao.TransaksiDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="userDao" class="com.mycompany.farrelaa.dao.UserDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+</beans>

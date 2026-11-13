@@ -1,23 +1,14 @@
 package com.mycompany.farrelaa;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import com.mycompany.farrelaa.dao.UserDao;
 import javax.swing.JOptionPane;
 
 /**
- * Form Login (JPanel) - terhubung ke database tk_db (Laragon MySQL).
+ * Form Login (JPanel) - cek akun lewat UserDao (Spring DAO + Hibernate) ke tabel users.
  *
  * @author Acer
  */
 public class LoginForm extends javax.swing.JPanel {
-
-    // Pengaturan koneksi database (Laragon default: user root, password kosong)
-    private static final String DB_URL  = "jdbc:mysql://localhost:3306/tk_db";
-    private static final String DB_USER = "root";
-    private static final String DB_PASS = "";
 
     /**
      * Creates new form LoginForm
@@ -111,7 +102,7 @@ public class LoginForm extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    // Tombol Submit: validasi input, cek ke tabel users di tk_db
+    // Tombol Submit: validasi input, cek akun lewat UserDao
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String username = txtUsername.getText().trim();
         String password = new String(txtPassword.getPassword());
@@ -122,32 +113,24 @@ public class LoginForm extends javax.swing.JPanel {
             return;
         }
 
-        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
-
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, username);
-            ps.setString(2, password);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    JOptionPane.showMessageDialog(this,
-                            "Login berhasil! Selamat datang, " + username);
-                    // Tutup jendela login, buka Menu Utama
-                    java.awt.Window jendela = javax.swing.SwingUtilities.getWindowAncestor(this);
-                    if (jendela != null) {
-                        jendela.dispose();
-                    }
-                    new MenuUtama().setVisible(true);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Username atau password salah!");
-                    txtPassword.setText("");
-                    txtPassword.requestFocus();
+        try {
+            // UserDao dibuat dan diisi oleh Spring (lihat applicationContext.xml)
+            User user = AppContext.getBean(UserDao.class).login(username, password);
+            if (user != null) {
+                JOptionPane.showMessageDialog(this,
+                        "Login berhasil! Selamat datang, " + user.getUsername());
+                // Tutup jendela login, buka Menu Utama
+                java.awt.Window jendela = javax.swing.SwingUtilities.getWindowAncestor(this);
+                if (jendela != null) {
+                    jendela.dispose();
                 }
+                new MenuUtama().setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Username atau password salah!");
+                txtPassword.setText("");
+                txtPassword.requestFocus();
             }
-
-        } catch (SQLException e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Koneksi database gagal: " + e.getMessage());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
