@@ -30,5 +30,18 @@
             <artifactId>spring-context</artifactId>
             <version>6.1.14</version>
         </dependency>
+        
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>6.21.5</version>
+        </dependency>
+
+        <!-- Compiler untuk file .jrxml (JasperReports mengompilasi ekspresi laporan saat runtime) -->
+        <dependency>
+            <groupId>org.eclipse.jdt</groupId>
+            <artifactId>ecj</artifactId>
+            <version>3.33.0</version>
+        </dependency>
     </dependencies>
 </project>

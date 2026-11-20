@@ -21,4 +21,9 @@
     <bean id="userDao" class="com.mycompany.farrelaa.dao.UserDaoImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
+
+    <!-- DAO laporan (Jasper Report) -->
+    <bean id="laporanDao" class="com.mycompany.farrelaa.dao.LaporanDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
 </beans>

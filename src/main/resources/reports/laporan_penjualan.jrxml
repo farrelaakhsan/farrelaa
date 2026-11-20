@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Dibuat untuk Jaspersoft Studio 6.21 / JasperReports 6.21.5 (database tk_db) -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="laporan_penjualan" language="java" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="30" bottomMargin="30" whenNoDataType="AllSectionsNoDetail">
+	<property name="net.sf.jasperreports.awt.ignore.missing.font" value="true"/>
+	<!-- Warna: hijau tua #14493D, hijau #1F6F5C, aksen #F2A93B, baris selang-seling #EAF3F0 -->
+	<style name="Dasar" isDefault="true" forecolor="#222222" fontName="Arial" fontSize="9" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="Tebal" style="Dasar" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="Miring" style="Dasar" forecolor="#555555" isItalic="true" pdfFontName="Helvetica-Oblique"/>
+	<style name="Abu" style="Dasar" forecolor="#555555"/>
+	<style name="JudulBesar" style="Dasar" forecolor="#FFFFFF" fontSize="20" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="JudulSedang" style="Dasar" forecolor="#FFFFFF" fontSize="15" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="TeksPutih" style="Dasar" forecolor="#FFFFFF"/>
+	<style name="TeksPutihTebal" style="Dasar" forecolor="#FFFFFF" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="HeadTabel" style="Tebal" mode="Opaque" forecolor="#FFFFFF" backcolor="#1F6F5C"/>
+	<style name="Zebra" style="Dasar" mode="Opaque" backcolor="#FFFFFF">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></conditionExpression>
+			<style backcolor="#EAF3F0"/>
+		</conditionalStyle>
+	</style>
+	<style name="KpiLabel" style="Dasar" forecolor="#555555" fontSize="8"/>
+	<style name="KpiNilai" style="Dasar" forecolor="#14493D" fontSize="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+
+	<parameter name="DARI" class="java.sql.Timestamp">
+		<parameterDescription><![CDATA[Awal periode (termasuk)]]></parameterDescription>
+		<defaultValueExpression><![CDATA[java.sql.Timestamp.valueOf("2026-01-01 00:00:00")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SAMPAI" class="java.sql.Timestamp">
+		<parameterDescription><![CDATA[Akhir periode (tidak termasuk; Java mengirim tanggal akhir + 1 hari)]]></parameterDescription>
+		<defaultValueExpression><![CDATA[java.sql.Timestamp.valueOf("2027-01-01 00:00:00")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PERIODE" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Semua periode"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="NAMA_TOKO" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Toko Kelontong"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUB_TOKO" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Manajemen Stok dan Penjualan"]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[SELECT t.id, t.tanggal, t.total, t.bayar, t.kembalian,
+       CAST(COALESCE((SELECT SUM(d.jumlah) FROM detail_transaksi d WHERE d.id_transaksi = t.id), 0) AS SIGNED) AS jumlah_item
+FROM transaksi t
+WHERE t.tanggal >= $P{DARI} AND t.tanggal < $P{SAMPAI}
+ORDER BY t.tanggal, t.id]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer"/>
+	<field name="tanggal" class="java.sql.Timestamp"/>
+	<field name="total" class="java.lang.Long"/>
+	<field name="bayar" class="java.lang.Long"/>
+	<field name="kembalian" class="java.lang.Long"/>
+	<field name="jumlah_item" class="java.lang.Long"/>
+	<variable name="TOTAL_PENJUALAN" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{total}]]></variableExpression>
+		<initialValueExpression><![CDATA[Long.valueOf(0)]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_ITEM" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{jumlah_item}]]></variableExpression>
+		<initialValueExpression><![CDATA[Long.valueOf(0)]]></initialValueExpression>
+	</variable>
+	<variable name="JUMLAH_TRANSAKSI" class="java.lang.Long" calculation="Count">
+		<variableExpression><![CDATA[$F{id}]]></variableExpression>
+		<initialValueExpression><![CDATA[Long.valueOf(0)]]></initialValueExpression>
+	</variable>
+	<title>
+		<band height="156">
+				<rectangle radius="0">
+					<reportElement mode="Opaque" x="0" y="0" width="535" height="70" forecolor="#1F6F5C" backcolor="#1F6F5C"/>
+					<graphicElement>
+						<pen lineWidth="0"/>
+					</graphicElement>
+				</rectangle>
+				<rectangle radius="0">
+					<reportElement mode="Opaque" x="0" y="70" width="535" height="4" forecolor="#F2A93B" backcolor="#F2A93B"/>
+					<graphicElement>
+						<pen lineWidth="0"/>
+					</graphicElement>
+				</rectangle>
+				<textField>
+					<reportElement style="JudulBesar" x="20" y="12" width="300" height="26"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$P{NAMA_TOKO}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="TeksPutih" x="20" y="42" width="300" height="14"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$P{SUB_TOKO}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="JudulSedang" x="285" y="14" width="230" height="24"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<text><![CDATA[LAPORAN PENJUALAN]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="TeksPutih" x="235" y="42" width="280" height="14"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA["Periode: " + $P{PERIODE}]]></textFieldExpression>
+				</textField>
+				<rectangle radius="6">
+					<reportElement mode="Opaque" x="0" y="92" width="171" height="50" forecolor="#1F6F5C" backcolor="#EAF3F0"/>
+					<graphicElement>
+						<pen lineWidth="0.75" lineColor="#1F6F5C"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement style="KpiLabel" x="10" y="99" width="151" height="12"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<text><![CDATA[Total Penjualan]]></text>
+				</staticText>
+				<textField pattern="'Rp '#,##0" evaluationTime="Report">
+					<reportElement style="KpiNilai" x="10" y="113" width="151" height="22"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{TOTAL_PENJUALAN}]]></textFieldExpression>
+				</textField>
+				<rectangle radius="6">
+					<reportElement mode="Opaque" x="182" y="92" width="171" height="50" forecolor="#1F6F5C" backcolor="#EAF3F0"/>
+					<graphicElement>
+						<pen lineWidth="0.75" lineColor="#1F6F5C"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement style="KpiLabel" x="192" y="99" width="151" height="12"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<text><![CDATA[Jumlah Transaksi]]></text>
+				</staticText>
+				<textField pattern="#,##0" evaluationTime="Report">
+					<reportElement style="KpiNilai" x="192" y="113" width="151" height="22"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{JUMLAH_TRANSAKSI}]]></textFieldExpression>
+				</textField>
+				<rectangle radius="6">
+					<reportElement mode="Opaque" x="364" y="92" width="171" height="50" forecolor="#1F6F5C" backcolor="#EAF3F0"/>
+					<graphicElement>
+						<pen lineWidth="0.75" lineColor="#1F6F5C"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement style="KpiLabel" x="374" y="99" width="151" height="12"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<text><![CDATA[Rata-rata per Transaksi]]></text>
+				</staticText>
+				<textField pattern="'Rp '#,##0" evaluationTime="Report">
+					<reportElement style="KpiNilai" x="374" y="113" width="151" height="22"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{JUMLAH_TRANSAKSI} > 0 ? $V{TOTAL_PENJUALAN} / $V{JUMLAH_TRANSAKSI} : 0L]]></textFieldExpression>
+				</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="24">
+			<staticText>
+				<reportElement style="HeadTabel" x="0" y="0" width="30" height="24"/>
+				<box leftPadding="4" rightPadding="4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="HeadTabel" x="30" y="0" width="85" height="24"/>
+				<box leftPadding="4" rightPadding="4"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[No. Faktur]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="HeadTabel" x="115" y="0" width="110" height="24"/>
+				<box leftPadding="4" rightPadding="4"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Tanggal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="HeadTabel" x="225" y="0" width="50" height="24"/>
+				<box leftPadding="4" rightPadding="4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Jml Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="HeadTabel" x="275" y="0" width="90" height="24"/>
+				<box leftPadding="4" rightPadding="4"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="HeadTabel" x="365" y="0" width="85" height="24"/>
+				<box leftPadding="4" rightPadding="4"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Bayar]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="HeadTabel" x="450" y="0" width="85" height="24"/>
+				<box leftPadding="4" rightPadding="4"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Kembalian]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+				<textField>
+					<reportElement style="Zebra" x="0" y="0" width="30" height="20"/>
+					<box leftPadding="4" rightPadding="4">
+						<bottomPen lineWidth="0.5" lineColor="#C9D6D1"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Zebra" x="30" y="0" width="85" height="20"/>
+					<box leftPadding="4" rightPadding="4">
+						<bottomPen lineWidth="0.5" lineColor="#C9D6D1"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA["INV-" + String.format("%06d", $F{id})]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd-MM-yyyy HH:mm">
+					<reportElement style="Zebra" x="115" y="0" width="110" height="20"/>
+					<box leftPadding="4" rightPadding="4">
+						<bottomPen lineWidth="0.5" lineColor="#C9D6D1"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{tanggal}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0">
+					<reportElement style="Zebra" x="225" y="0" width="50" height="20"/>
+					<box leftPadding="4" rightPadding="4">
+						<bottomPen lineWidth="0.5" lineColor="#C9D6D1"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{jumlah_item}]]></textFieldExpression>
+				</textField>
+				<textField pattern="'Rp '#,##0">
+					<reportElement style="Zebra" x="275" y="0" width="90" height="20"/>
+					<box leftPadding="4" rightPadding="4">
+						<bottomPen lineWidth="0.5" lineColor="#C9D6D1"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+				</textField>
+				<textField pattern="'Rp '#,##0">
+					<reportElement style="Zebra" x="365" y="0" width="85" height="20"/>
+					<box leftPadding="4" rightPadding="4">
+						<bottomPen lineWidth="0.5" lineColor="#C9D6D1"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{bayar}]]></textFieldExpression>
+				</textField>
+				<textField pattern="'Rp '#,##0">
+					<reportElement style="Zebra" x="450" y="0" width="85" height="20"/>
+					<box leftPadding="4" rightPadding="4">
+						<bottomPen lineWidth="0.5" lineColor="#C9D6D1"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{kembalian}]]></textFieldExpression>
+				</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="24">
+				<line>
+					<reportElement x="0" y="2" width="535" height="0" forecolor="#C9D6D1"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineColor="#C9D6D1"/>
+					</graphicElement>
+				</line>
+				<staticText>
+					<reportElement style="Abu" x="0" y="6" width="385" height="14"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<text><![CDATA[Dicetak otomatis oleh Aplikasi Manajemen Stok dan Penjualan Toko Kelontong]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="Abu" x="385" y="6" width="100" height="14"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA["Halaman " + $V{PAGE_NUMBER} + " dari"]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Report">
+					<reportElement style="Abu" x="485" y="6" width="50" height="14"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="64">
+				<rectangle radius="0">
+					<reportElement mode="Opaque" x="0" y="6" width="535" height="24" forecolor="#14493D" backcolor="#14493D"/>
+					<graphicElement>
+						<pen lineWidth="0"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement style="TeksPutihTebal" x="0" y="6" width="225" height="24"/>
+					<box leftPadding="8"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<text><![CDATA[TOTAL]]></text>
+				</staticText>
+				<textField pattern="#,##0">
+					<reportElement style="TeksPutihTebal" x="225" y="6" width="50" height="24"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{TOTAL_ITEM}]]></textFieldExpression>
+				</textField>
+				<textField pattern="'Rp '#,##0">
+					<reportElement style="TeksPutihTebal" x="275" y="6" width="90" height="24"/>
+					<box leftPadding="4" rightPadding="4"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{TOTAL_PENJUALAN}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="Miring" x="0" y="38" width="535" height="18">
+						<printWhenExpression><![CDATA[$V{JUMLAH_TRANSAKSI} == 0]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<text><![CDATA[Tidak ada transaksi pada periode ini.]]></text>
+				</staticText>
+		</band>
+	</summary>
+</jasperReport>

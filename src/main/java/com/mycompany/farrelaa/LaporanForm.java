@@ -28,7 +28,7 @@ public class LaporanForm extends javax.swing.JFrame {
         txtSampai.setText(LocalDate.now().toString());
         jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Penjualan"));
         jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Stok"));
-        setSize(800, 520);
+        setSize(920, 520);
         setLocationRelativeTo(null);
         tampilkan();
     }
@@ -48,6 +48,9 @@ public class LaporanForm extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         txtSampai = new javax.swing.JTextField();
         btnTampil = new javax.swing.JButton();
+        btnCetakPenjualan = new javax.swing.JButton();
+        btnCetakStok = new javax.swing.JButton();
+        btnCetakFaktur = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelJual = new javax.swing.JTable();
@@ -75,6 +78,27 @@ public class LaporanForm extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnTampil);
+        btnCetakPenjualan.setText("Cetak Penjualan");
+        btnCetakPenjualan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCetakPenjualanActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnCetakPenjualan);
+        btnCetakStok.setText("Cetak Stok");
+        btnCetakStok.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCetakStokActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnCetakStok);
+        btnCetakFaktur.setText("Cetak Faktur");
+        btnCetakFaktur.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCetakFakturActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnCetakFaktur);
         getContentPane().add(jPanel1, java.awt.BorderLayout.NORTH);
 
         jPanel2.setLayout(new java.awt.GridLayout(2, 1));
@@ -126,6 +150,46 @@ public class LaporanForm extends javax.swing.JFrame {
         tampilkan();
     }//GEN-LAST:event_btnTampilActionPerformed
 
+    private void btnCetakPenjualanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakPenjualanActionPerformed
+        LocalDate[] p = bacaPeriode();
+        if (p != null) {
+            LaporanHelper.cetakPenjualan(this, p[0], p[1]);
+        }
+    }//GEN-LAST:event_btnCetakPenjualanActionPerformed
+
+    private void btnCetakStokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakStokActionPerformed
+        LocalDate[] p = bacaPeriode();
+        if (p != null) {
+            LaporanHelper.cetakStok(this, p[0], p[1]);
+        }
+    }//GEN-LAST:event_btnCetakStokActionPerformed
+
+    private void btnCetakFakturActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakFakturActionPerformed
+        int baris = tabelJual.getSelectedRow();
+        if (baris < 0) {
+            Util.info(this, "Pilih satu transaksi di tabel Penjualan dulu!");
+            return;
+        }
+        int id = (Integer) mJual.getValueAt(tabelJual.convertRowIndexToModel(baris), 0);
+        LaporanHelper.cetakFaktur(this, id);
+    }//GEN-LAST:event_btnCetakFakturActionPerformed
+
+    // Baca dan cek tanggal Dari/Sampai untuk cetak laporan; null jika tidak valid
+    private LocalDate[] bacaPeriode() {
+        try {
+            LocalDate dari = LocalDate.parse(txtDari.getText().trim());
+            LocalDate sampai = LocalDate.parse(txtSampai.getText().trim());
+            if (sampai.isBefore(dari)) {
+                Util.info(this, "Tanggal 'Sampai' tidak boleh sebelum 'Dari'!");
+                return null;
+            }
+            return new LocalDate[]{dari, sampai};
+        } catch (DateTimeParseException e) {
+            Util.info(this, "Format tanggal harus yyyy-MM-dd, contoh 2026-11-06");
+            return null;
+        }
+    }
+
     private void tampilkan() {
         LocalDate dari;
         LocalDate sampai;
@@ -172,6 +236,9 @@ public class LaporanForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCetakFaktur;
+    private javax.swing.JButton btnCetakPenjualan;
+    private javax.swing.JButton btnCetakStok;
     private javax.swing.JButton btnTampil;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

@@ -261,11 +261,18 @@ public class TransaksiForm extends javax.swing.JFrame {
 
         try {
             Transaksi t = AppContext.getBean(TransaksiDao.class).simpan(items, bayar);
-            Util.info(this, "Transaksi tersimpan.\nTotal: " + Util.rp(t.getTotal())
+            String ringkas = "Transaksi tersimpan.\nTotal: " + Util.rp(t.getTotal())
                     + "\nBayar: " + Util.rp(t.getBayar())
-                    + "\nKembalian: " + Util.rp(t.getKembalian()));
+                    + "\nKembalian: " + Util.rp(t.getKembalian());
+            int idTransaksi = t.getId();
             kosongkan();
             muatBarang();
+            // Tawarkan cetak faktur (Jasper Report)
+            int pilih = javax.swing.JOptionPane.showConfirmDialog(this, ringkas + "\n\nCetak faktur?",
+                    "Transaksi", javax.swing.JOptionPane.YES_NO_OPTION);
+            if (pilih == javax.swing.JOptionPane.YES_OPTION) {
+                LaporanHelper.cetakFaktur(this, idTransaksi);
+            }
         } catch (IllegalStateException e) {
             // stok atau uang bayar kurang (pesan dari DAO)
             Util.info(this, e.getMessage());
