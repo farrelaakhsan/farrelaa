@@ -37,7 +37,6 @@
             <version>6.21.5</version>
         </dependency>
 
-        <!-- Compiler untuk file .jrxml (JasperReports mengompilasi ekspresi laporan saat runtime) -->
         <dependency>
             <groupId>org.eclipse.jdt</groupId>
             <artifactId>ecj</artifactId>

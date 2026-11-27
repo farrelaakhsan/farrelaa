@@ -30,7 +30,9 @@ public class TransaksiForm extends javax.swing.JFrame {
             @Override
             public void changedUpdate(DocumentEvent e) { hitungKembali(); }
         });
-        setSize(850, 480);
+        Tema.terapkan(this, "Transaksi Penjualan"); // tampilan
+        Tema.sorot(lblTotal, lblKembali);
+        setSize(1020, 520);
         setLocationRelativeTo(null);
         muatBarang();
     }

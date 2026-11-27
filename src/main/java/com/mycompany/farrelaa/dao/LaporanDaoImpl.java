@@ -1,5 +1,6 @@
 package com.mycompany.farrelaa.dao;
 
+import com.mycompany.farrelaa.Toko;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
@@ -86,6 +87,8 @@ public class LaporanDaoImpl implements LaporanDao {
     // Isi laporan dengan data dari database memakai koneksi milik session Hibernate
     private JasperPrint isi(String nama, Map<String, Object> param) {
         param.put(JRParameter.REPORT_LOCALE, ID);
+        param.put("NAMA_TOKO", Toko.NAMA); // nama toko di banner laporan
+        param.put("SUB_TOKO", Toko.SUB);
         JasperPrint[] hasil = new JasperPrint[1];
         try (Session s = sessionFactory.openSession()) {
             JasperReport laporan = muat(nama);

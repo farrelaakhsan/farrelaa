@@ -20,7 +20,8 @@ public class BarangForm extends javax.swing.JFrame {
                 isiFormDariTabel();
             }
         });
-        setSize(900, 450);
+        Tema.terapkan(this, "Kelola Data Barang"); // tampilan
+        setSize(900, 480);
         setLocationRelativeTo(null);
         muatData(null);
     }

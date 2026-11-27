@@ -1,17 +1,66 @@
 package com.mycompany.farrelaa;
 
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+
 /**
  * Menu utama setelah login berhasil.
  */
 public class MenuUtama extends javax.swing.JFrame {
 
+    private static final Color HIJAU = new Color(0x1F6F5C);
+    private static final Color HIJAU_TUA = new Color(0x14493D);
+    private static final Color LATAR = new Color(0xF4F8F6);
+
     public MenuUtama() {
         initComponents();
-        // jarak antar tombol dan margin panel
-        ((java.awt.GridLayout) jPanel1.getLayout()).setVgap(10);
-        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 40, 20, 40));
+        tampilan();
         pack();
+        setSize(Math.max(getWidth(), 440), getHeight());
         setLocationRelativeTo(null);
+    }
+
+    // Percantik tampilan (warna, font, jarak). Dipisah dari kode designer supaya tidak tertimpa NetBeans.
+    private void tampilan() {
+        setTitle("Menu Utama - " + Toko.NAMA);
+        getContentPane().setBackground(LATAR);
+
+        // Header: nama toko
+        pnlHeader.setBackground(HIJAU);
+        pnlHeader.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(0, 0, 4, 0, new Color(0xF2A93B)),
+                BorderFactory.createEmptyBorder(18, 24, 14, 24)));
+        lblNamaToko.setText(Toko.NAMA);
+        lblNamaToko.setFont(new Font("Arial", Font.BOLD, 24));
+        lblNamaToko.setForeground(Color.WHITE);
+        lblSub.setText(Toko.SUB);
+        lblSub.setFont(new Font("Arial", Font.PLAIN, 12));
+        lblSub.setForeground(Color.WHITE);
+
+        // Tombol menu
+        jPanel1.setBackground(LATAR);
+        jPanel1.setBorder(BorderFactory.createEmptyBorder(24, 60, 10, 60));
+        ((java.awt.GridLayout) jPanel1.getLayout()).setVgap(12);
+        for (JButton b : new JButton[]{btnBarang, btnTransaksi, btnLaporan}) {
+            gayaTombol(b, HIJAU, Color.WHITE);
+        }
+
+        // Tombol keluar (warna beda)
+        pnlBawah.setBackground(LATAR);
+        pnlBawah.setBorder(BorderFactory.createEmptyBorder(0, 60, 24, 60));
+        gayaTombol(btnKeluar, new Color(0xC62828), Color.WHITE);
+    }
+
+    private void gayaTombol(JButton b, Color latar, Color teks) {
+        b.setFont(new Font("Arial", Font.BOLD, 14));
+        b.setBackground(latar);
+        b.setForeground(teks);
+        b.setOpaque(true);
+        b.setFocusPainted(false);
+        b.setBorder(BorderFactory.createEmptyBorder(12, 16, 12, 16));
+        b.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
     }
 
     /**
@@ -23,21 +72,30 @@ public class MenuUtama extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        pnlHeader = new javax.swing.JPanel();
+        lblNamaToko = new javax.swing.JLabel();
+        lblSub = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        lblJudul = new javax.swing.JLabel();
         btnBarang = new javax.swing.JButton();
         btnTransaksi = new javax.swing.JButton();
         btnLaporan = new javax.swing.JButton();
+        pnlBawah = new javax.swing.JPanel();
         btnKeluar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Menu Utama - Toko Kelontong");
+        setTitle("Menu Utama - Toko Berkah Jaya");
         getContentPane().setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setLayout(new java.awt.GridLayout(5, 1));
-        lblJudul.setText("MENU UTAMA");
-        lblJudul.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jPanel1.add(lblJudul);
+        pnlHeader.setLayout(new java.awt.GridLayout(2, 1));
+        lblNamaToko.setText("Toko Berkah Jaya");
+        lblNamaToko.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        pnlHeader.add(lblNamaToko);
+        lblSub.setText("Toko Kelontong - Manajemen Stok dan Penjualan");
+        lblSub.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        pnlHeader.add(lblSub);
+        getContentPane().add(pnlHeader, java.awt.BorderLayout.NORTH);
+
+        jPanel1.setLayout(new java.awt.GridLayout(3, 1));
         btnBarang.setText("Kelola Data Barang");
         btnBarang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -59,14 +117,17 @@ public class MenuUtama extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnLaporan);
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+
+        pnlBawah.setLayout(new java.awt.BorderLayout());
         btnKeluar.setText("Keluar");
         btnKeluar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnKeluarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnKeluar);
-        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+        pnlBawah.add(btnKeluar, java.awt.BorderLayout.CENTER);
+        getContentPane().add(pnlBawah, java.awt.BorderLayout.SOUTH);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -96,6 +157,9 @@ public class MenuUtama extends javax.swing.JFrame {
     private javax.swing.JButton btnLaporan;
     private javax.swing.JButton btnTransaksi;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel lblJudul;
+    private javax.swing.JLabel lblNamaToko;
+    private javax.swing.JLabel lblSub;
+    private javax.swing.JPanel pnlBawah;
+    private javax.swing.JPanel pnlHeader;
     // End of variables declaration//GEN-END:variables
 }

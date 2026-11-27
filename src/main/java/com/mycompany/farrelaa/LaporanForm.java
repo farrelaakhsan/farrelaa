@@ -28,7 +28,10 @@ public class LaporanForm extends javax.swing.JFrame {
         txtSampai.setText(LocalDate.now().toString());
         jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Penjualan"));
         jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Stok"));
-        setSize(920, 520);
+        Tema.terapkan(this, "Laporan"); // tampilan
+        Tema.sorot(lblTotal);
+        lblTotal.setBorder(javax.swing.BorderFactory.createEmptyBorder(8, 16, 10, 16));
+        setSize(980, 580);
         setLocationRelativeTo(null);
         tampilkan();
     }

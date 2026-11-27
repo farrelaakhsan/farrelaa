@@ -3,7 +3,7 @@
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
-    <Property name="title" type="java.lang.String" value="Menu Utama - Toko Kelontong"/>
+    <Property name="title" type="java.lang.String" value="Menu Utama - Toko Berkah Jaya"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -23,6 +23,31 @@
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
   <SubComponents>
+    <Container class="javax.swing.JPanel" name="pnlHeader">
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+          <BorderConstraints direction="North"/>
+        </Constraint>
+      </Constraints>
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+        <Property name="columns" type="int" value="1"/>
+        <Property name="rows" type="int" value="2"/>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JLabel" name="lblNamaToko">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Toko Berkah Jaya"/>
+            <Property name="horizontalAlignment" type="int" value="0"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblSub">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Toko Kelontong - Manajemen Stok dan Penjualan"/>
+            <Property name="horizontalAlignment" type="int" value="0"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
     <Container class="javax.swing.JPanel" name="jPanel1">
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
@@ -31,15 +56,9 @@
       </Constraints>
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
         <Property name="columns" type="int" value="1"/>
-        <Property name="rows" type="int" value="5"/>
+        <Property name="rows" type="int" value="3"/>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="lblJudul">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="MENU UTAMA"/>
-            <Property name="horizontalAlignment" type="int" value="0"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JButton" name="btnBarang">
           <Properties>
             <Property name="text" type="java.lang.String" value="Kelola Data Barang"/>
@@ -64,6 +83,16 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLaporanActionPerformed"/>
           </Events>
         </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPanel" name="pnlBawah">
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+          <BorderConstraints direction="South"/>
+        </Constraint>
+      </Constraints>
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+      <SubComponents>
         <Component class="javax.swing.JButton" name="btnKeluar">
           <Properties>
             <Property name="text" type="java.lang.String" value="Keluar"/>
@@ -71,6 +100,11 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnKeluarActionPerformed"/>
           </Events>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+              <BorderConstraints direction="Center"/>
+            </Constraint>
+          </Constraints>
         </Component>
       </SubComponents>
     </Container>
